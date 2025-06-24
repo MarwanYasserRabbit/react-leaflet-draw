@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MapContainer, TileLayer, Circle, FeatureGroup } from 'react-leaflet';
+import { MapContainer, TileLayer, FeatureGroup } from 'marwan-yasser-react-leaflet';
 import L from 'leaflet';
 import { EditControl } from '../src';
 

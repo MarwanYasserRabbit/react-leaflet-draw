@@ -1,10 +1,9 @@
 import { PropTypes } from 'prop-types';
-import Draw from 'leaflet-draw'; // eslint-disable-line
 import isEqual from 'fast-deep-equal';
 import React, { useRef } from 'react';
-import { useLeafletContext } from '@react-leaflet/core';
-
-import leaflet, { Map, Control } from 'leaflet';
+import { useMap } from 'marwan-yasser-react-leaflet';
+import L from 'leaflet';
+import 'leaflet-draw';
 
 const eventHandlers = {
   onEdited: 'draw:edited',
@@ -22,19 +21,21 @@ const eventHandlers = {
 };
 
 function EditControl(props) {
-  const context = useLeafletContext();
   const drawRef = useRef();
   const propsRef = useRef(props);
+  const map = useMap();
+  const context = map;
+  context.layerContainer = L.featureGroup();
+  map.addLayer(context.layerContainer);
 
   const onDrawCreate = (e) => {
     const { onCreated } = props;
-    const container = context.layerContainer || context.map;
-    container.addLayer(e.layer);
+    const container = map;
+    context.layerContainer.addLayer(e.layer);
     onCreated && onCreated(e);
   };
 
   React.useEffect(() => {
-    const { map } = context;
     const { onMounted } = props;
 
     for (const key in eventHandlers) {
@@ -48,13 +49,13 @@ function EditControl(props) {
         }
       });
     }
-    map.on(leaflet.Draw.Event.CREATED, onDrawCreate);
+    map.on(L.Draw.Event.CREATED, onDrawCreate);
     drawRef.current = createDrawElement(props, context);
     map.addControl(drawRef.current);
     onMounted && onMounted(drawRef.current);
 
     return () => {
-      map.off(leaflet.Draw.Event.CREATED, onDrawCreate);
+      map.off(L.Draw.Event.CREATED, onDrawCreate);
 
       for (const key in eventHandlers) {
         if (props[key]) {
@@ -70,21 +71,28 @@ function EditControl(props) {
       isEqual(props.edit, propsRef.current.edit) &&
       props.position === propsRef.current.position
     ) {
-      return false;
+      return;
     }
-    const { map } = context;
 
-    drawRef.current.remove(map);
+    if (drawRef.current) {
+      map.removeControl(drawRef.current);
+    }
+
     drawRef.current = createDrawElement(props, context);
     drawRef.current.addTo(map);
 
     const { onMounted } = props;
     onMounted && onMounted(drawRef.current);
 
-    return null;
+    return () => {
+      if (drawRef.current) {
+        map.removeControl(drawRef.current);
+        drawRef.current = null;
+      }
+    };
   }, [props.draw, props.edit, props.position]);
 
-  return null;
+  return () => {};
 }
 
 function createDrawElement(props, context) {
@@ -105,7 +113,7 @@ function createDrawElement(props, context) {
     options.position = position;
   }
 
-  return new Control.Draw(options);
+  return new L.Control.Draw(options);
 }
 
 EditControl.propTypes = {
@@ -135,7 +143,7 @@ EditControl.propTypes = {
     'bottomleft',
   ]),
   leaflet: PropTypes.shape({
-    map: PropTypes.instanceOf(Map),
+    map: PropTypes.instanceOf(L.Map),
     layerContainer: PropTypes.shape({
       addLayer: PropTypes.func.isRequired,
       removeLayer: PropTypes.func.isRequired,

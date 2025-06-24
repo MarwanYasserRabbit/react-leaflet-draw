@@ -26,11 +26,11 @@ You might need to add one more rule missing in the current css:
   }
 ```
 
-It's important to wrap EditControl component into FeatureGroup component from `react-leaflet`.
+It's important to wrap EditControl component into FeatureGroup component from `marwan-yasser-react-leaflet`.
 The elements you draw will be added to this FeatureGroup layer, when you hit edit button only items in this layer will be edited.
 
 ```jsx
-import { Map, TileLayer, FeatureGroup, Circle } from 'react-leaflet';
+import { Map, TileLayer, FeatureGroup, Circle } from 'marwan-yasser-react-leaflet';
 import { EditControl } from "react-leaflet-draw"
 
 const Component = () => (
