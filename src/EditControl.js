@@ -62,8 +62,10 @@ function EditControl(props) {
           map.off(eventHandlers[key], props[key]);
         }
       }
+
+      drawRef.current.remove(map);
     };
-  }, []);
+  }, [props.onCreated, props.onDeleted, props.onEdited]);
 
   React.useEffect(() => {
     if (

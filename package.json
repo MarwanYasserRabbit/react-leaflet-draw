@@ -15,7 +15,8 @@
     "prepublish": "npm run build",
     "version": "npm run build",
     "postversion": "git push && git push --tags",
-    "example": "webpack-dev-server --config ./example/webpack.config.js",
+    "example:class": "webpack-dev-server --config ./examples/class/webpack.config.js",
+    "example:hooks": "cd ./examples/hooks && vite",
     "lint": "eslint ./src"
   },
   "repository": {
@@ -52,8 +53,12 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-react": "^7.12.1",
+    "@types/leaflet": "^1.9.16",
+    "@types/leaflet-draw": "^1.0.11",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
     "babel-loader": "^8.1.0",
-    "eslint": "^7.11.0",
+    "eslint": "^8.17.0",
     "eslint-plugin-react": "^7.21.5",
      "leaflet": "^1.9.4",
     "leaflet-draw": "^1.0.4",
@@ -67,7 +72,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "fast-deep-equal": "^2.0.1",
+    "fast-deep-equal": "^3.1.3",
     "lodash-es": "^4.17.15"
   }
 }
