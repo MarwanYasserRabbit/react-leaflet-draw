@@ -25,7 +25,9 @@ function EditControl(props) {
   const propsRef = useRef(props);
   const map = useMap();
   const context = map;
-  context.layerContainer = L.featureGroup();
+  const layerGroup =
+    (featureGroupRef && featureGroupRef.current) || L.featureGroup();
+  context.layerContainer = layerGroup;
   map.addLayer(context.layerContainer);
 
   const onDrawCreate = (e) => {
