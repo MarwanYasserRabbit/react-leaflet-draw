@@ -1,6 +1,6 @@
 {
   "name": "marwan-yasser-react-leaflet-draw",
-  "version": "0.20.6",
+  "version": "0.20.7",
   "description": "React component for leaflet-draw",
   "main": "dist/marwan-yasser-react-leaflet-draw.js",
   "module": "dist/esm/index.js",
